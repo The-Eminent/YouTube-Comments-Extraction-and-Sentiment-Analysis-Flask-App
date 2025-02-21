@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            width: 50%;
+            margin: 0 auto;
+        }
+        .comment-card {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">YouTube Sentiment Analysis</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Sentiment Analysis Results</h1>
+        <h4 class="text-center">Video URL: {{ video_url }}</h4>
+
+        <!-- Pie Chart -->
+        <div class="chart-container">
+            <canvas id="sentimentChart"></canvas>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="mt-5">
+            <h3>Summary</h3>
+            <p>Total Comments Analyzed: {{ total_comments }}</p>
+            <p>Positive: {{ sentiment_counts.Positive }} ({{ (sentiment_counts.Positive / total_comments * 100) | round(2) }}%)</p>
+            <p>Negative: {{ sentiment_counts.Negative }} ({{ (sentiment_counts.Negative / total_comments * 100) | round(2) }}%)</p>
+            <p>Neutral: {{ sentiment_counts.Neutral }} ({{ (sentiment_counts.Neutral / total_comments * 100) | round(2) }}%)</p>
+        </div>
+
+        <!-- Sample Comments -->
+        <div class="mt-5">
+            <h3>Sample Comments</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Positive Comments</h5>
+                    {% for comment in sample_positive %}
+                        <div class="card comment-card">
+                            <div class="card-body">
+                                {{ comment }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-4">
+                    <h5>Negative Comments</h5>
+                    {% for comment in sample_negative %}
+                        <div class="card comment-card">
+                            <div class="card-body">
+                                {{ comment }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-4">
+                    <h5>Neutral Comments</h5>
+                    {% for comment in sample_neutral %}
+                        <div class="card comment-card">
+                            <div class="card-body">
+                                {{ comment }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home Button -->
+        <div class="text-center mt-5">
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Pass the sentiment counts from Flask to JavaScript
+        const sentimentData = {
+            labels: ['Positive', 'Negative', 'Neutral'],
+            datasets: [{
+                label: 'Sentiment Analysis',
+                data: [{{ sentiment_counts.Positive }}, {{ sentiment_counts.Negative }}, {{ sentiment_counts.Neutral }}],
+                backgroundColor: ['#4CAF50', '#F44336', '#9E9E9E']
+            }]
+        };
+
+        // Render the chart
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+        const sentimentChart = new Chart(ctx, {
+            type: 'pie',
+            data: sentimentData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+</body>
+
+</html>
