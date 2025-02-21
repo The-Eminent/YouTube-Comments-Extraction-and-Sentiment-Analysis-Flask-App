@@ -23,7 +23,7 @@ A web application built with Python Flask that extracts comments from a YouTube 
 ### Installation
 
 1. **Clone the repository**:
-git clone https://github.com/The-Eminent/youtube-sentiment-analysis.git
+git clone [https://github.com/The-Eminent/youtube-sentiment-analysis.git](https://github.com/The-Eminent/YouTube-Comments-Extraction-and-Sentiment-Analysis-Flask-App.git)
 cd youtube-sentiment-analysis
 
 2. **Create a virtual environment**:
